@@ -9,6 +9,7 @@ const REMINDER_CHECK_INTERVAL_MS = 30 * MS_PER_SECOND;
 const defaultData = { projects: [] };
 let data = loadData();
 let selectedProjectId = null;
+let reminderIntervalId = null;
 
 const state = {
   shareToken: new URLSearchParams(window.location.search).get("share"),
@@ -207,7 +208,6 @@ function wireEvents() {
     render();
   });
 
-  setInterval(() => renderReminderOnly(), REMINDER_CHECK_INTERVAL_MS);
 }
 
 function hydrateMode() {
@@ -236,8 +236,22 @@ function canEdit(project) {
 }
 
 function render() {
+  syncReminderInterval();
   renderProjects();
   renderProjectView();
+}
+
+function syncReminderInterval() {
+  const hasReviewProject = data.projects.some((project) => project.status === "Review");
+  if (hasReviewProject && !reminderIntervalId) {
+    reminderIntervalId = setInterval(() => renderReminderOnly(), REMINDER_CHECK_INTERVAL_MS);
+    return;
+  }
+
+  if (!hasReviewProject && reminderIntervalId) {
+    clearInterval(reminderIntervalId);
+    reminderIntervalId = null;
+  }
 }
 
 function renderProjects() {
