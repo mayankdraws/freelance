@@ -21,7 +21,7 @@ Lightweight workflow MVP for project-based file review and approval.
 Because this is a static app, run any simple web server from repository root:
 
 ```bash
-cd /home/runner/work/freelance/freelance
+cd path/to/freelance
 python3 -m http.server 8080
 ```
 
