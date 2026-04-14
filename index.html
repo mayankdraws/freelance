@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lightweight Workflow System</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Workflow</h1>
+      <span id="modeBadge" class="badge muted">Editor</span>
+    </header>
+
+    <main class="layout">
+      <aside class="panel left" id="workspacePanel">
+        <h2>Projects</h2>
+        <form id="newProjectForm" class="row">
+          <input id="projectNameInput" type="text" placeholder="New project name" required maxlength="80" />
+          <button type="submit">Create</button>
+        </form>
+        <ul id="projectList" class="stack"></ul>
+
+        <section class="box">
+          <h3>Version</h3>
+          <div class="row">
+            <label for="fileInput" class="btnlike">Upload file</label>
+            <input id="fileInput" type="file" accept="image/*" />
+          </div>
+          <small id="lockHint" class="muted"></small>
+          <ul id="versionList" class="stack compact"></ul>
+        </section>
+
+        <section class="box">
+          <h3>Share</h3>
+          <button id="createShareLinkBtn" type="button">Create view-only link</button>
+          <input id="shareLinkOutput" type="text" readonly />
+        </section>
+      </aside>
+
+      <section class="panel center">
+        <div class="row between centerbar">
+          <h2 id="projectTitle">Select a project</h2>
+          <span id="statusBadge" class="badge muted">No status</span>
+        </div>
+
+        <div id="reminderBanner" class="notice hidden">
+          This review is pending feedback.
+          <button id="sendReminderBtn" type="button">Send reminder</button>
+        </div>
+
+        <div id="canvasWrapper" class="canvas-wrapper empty">
+          <p id="emptyState">Upload an image file to start reviewing.</p>
+          <img id="designImage" alt="Uploaded design" />
+          <div id="pinLayer"></div>
+        </div>
+      </section>
+
+      <aside class="panel right">
+        <section class="box">
+          <h3>Feedback</h3>
+          <div class="row">
+            <button id="toReviewBtn" type="button">Move to Review</button>
+            <button id="approveBtn" type="button">Approve</button>
+          </div>
+          <div class="stack">
+            <label for="changeRequestInput">What should change?</label>
+            <textarea id="changeRequestInput" rows="4" placeholder="Describe requested changes..."></textarea>
+            <button id="requestChangesBtn" type="button">Request changes</button>
+          </div>
+          <div id="approvalProof" class="proof muted"></div>
+        </section>
+
+        <section class="box">
+          <h3>Comments</h3>
+          <p class="muted">Click on the design to add contextual comments.</p>
+          <ul id="commentList" class="stack"></ul>
+        </section>
+
+        <section class="box">
+          <h3>Timeline</h3>
+          <ul id="timelineList" class="stack"></ul>
+        </section>
+      </aside>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
