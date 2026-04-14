@@ -1,5 +1,10 @@
 const STORAGE_KEY = "lwf_data_v1";
-const REVIEW_REMINDER_MS = 24 * 60 * 60 * 1000;
+const MS_PER_SECOND = 1000;
+const SECONDS_PER_MINUTE = 60;
+const MINUTES_PER_HOUR = 60;
+const HOURS_PER_DAY = 24;
+const REVIEW_REMINDER_MS = HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE * MS_PER_SECOND;
+const REMINDER_CHECK_INTERVAL_MS = 30 * MS_PER_SECOND;
 
 const defaultData = { projects: [] };
 let data = loadData();
@@ -202,7 +207,7 @@ function wireEvents() {
     render();
   });
 
-  setInterval(() => renderReminderOnly(), 30 * 1000);
+  setInterval(() => renderReminderOnly(), REMINDER_CHECK_INTERVAL_MS);
 }
 
 function hydrateMode() {
@@ -390,7 +395,17 @@ function persist() {
 }
 
 function uid() {
-  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
 }
 
 function nowISO() {
